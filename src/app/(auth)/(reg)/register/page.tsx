@@ -2,48 +2,29 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useRegFormContext } from '@/contexts/RegFormContext'
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const { setRegFormData } = useRegFormContext()
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
-    console.log(123, email)
-    console.log(124, password)
-
-    setLoading(true)
-    try {
-      const response = await fetch('api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, password: password })
-      })
-      console.log(555, response)
-      if (!response.ok) {
-        setError('Что то пошло не так')
-        router.push('/')
-      } else {
-        router.push('/login')
-      }
-    } catch (error) {
-      // setErrorMessage(error)
-      console.error(12, 'Error:', error)
-    } finally {
-      setLoading(false)
+    console.log(email, password)
+    if (email && password) {
+      setRegFormData({ email, password })
+      router.replace('/verify/verify-email')
     }
   }
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
       <h1 className="text-2xl font-bold mb-4">Регистрация</h1>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
+
       {/* <form> */}
-      <form onSubmit={handleRegister}>
+      <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-gray-700 mb-2" htmlFor="email">
             Почта
@@ -72,7 +53,6 @@ export default function RegisterPage() {
         </div>
         <button
           type="submit"
-          disabled={loading}
           className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
         >
           Зарегистрироваться
