@@ -18,16 +18,17 @@ export default function RegisterPage() {
 
     setLoading(true)
     try {
-      const response = await fetch('/register/api', {
+      const response = await fetch('api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email, password: password })
       })
+      console.log(555, response)
       if (!response.ok) {
         setError('Что то пошло не так')
         router.push('/')
       } else {
-        router.push('/users-db')
+        router.push('/login')
       }
     } catch (error) {
       // setErrorMessage(error)

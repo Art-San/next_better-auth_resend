@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useLocalStorage } from '@/hooks/useLocalStorage'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -9,6 +10,7 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const { setValue } = useLocalStorage('user', null)
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,10 +26,11 @@ export default function LoginPage() {
 
       if (!response.ok) {
         setError('Что то пошло не так')
-        // router.push('/')
+        router.push('/')
       } else {
         const user = await response.json()
-        localStorage.setItem('user', JSON.stringify(user))
+        setValue(user)
+        // localStorage.setItem('user', JSON.stringify(user))
         router.push('/users-db')
       }
     } catch (error) {
