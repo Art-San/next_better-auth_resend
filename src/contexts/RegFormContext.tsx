@@ -20,7 +20,7 @@ const RegFormContext = createContext<RegFormContextType>({
 export const RegFormProvider = ({ children }: { children: ReactNode }) => {
   const [regFormData, setRegFormData] =
     useState<RegFormData>(initialRegFormData)
-  console.log(45, regFormData)
+  // console.log(45, regFormData)
   const resetRegForm = () => {
     setRegFormData(initialRegFormData)
   }

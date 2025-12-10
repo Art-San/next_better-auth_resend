@@ -40,6 +40,10 @@ export async function loginUser(email: string, password: string) {
       throw new Error('Не верный email или пароль')
     }
 
+    if (!user.password) {
+      throw new Error('Не верный email или пароль')
+    }
+
     const isValid = await verifyPassword(password, user.password)
 
     if (!isValid) {
