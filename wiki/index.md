@@ -7,6 +7,7 @@
 - [Auth API](./api/api-auth-all.md)
 - [Login API (Deprecated)](./api/api-login.md)
 - [Register API (Deprecated)](./api/api-register.md)
+- [Set Password API](./api/api-set-password.md)
 
 ### Компоненты
 
@@ -16,6 +17,7 @@
 - [LoadingContent](./components/component-loading-content.md)
 - [SuccessSent](./components/component-success-sent.md)
 - [VerifyEmail](./components/component-verify-email.md)
+- [EnterCode](./components/component-enter-code.md)
 
 ### Страницы
 
@@ -23,6 +25,7 @@
 - [Login Page](./components/page-login.md)
 - [Register Page](./components/page-register.md)
 - [Users DB Page](./components/page-users-db.md)
+- [Verify Phone Page](./components/page-verify-phone.md)
 
 ### Утилиты и Хуки
 

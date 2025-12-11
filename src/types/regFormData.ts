@@ -1,6 +1,6 @@
 export interface RegFormData {
   email: string
   password: string
-  phone?: string
+  phoneNumber?: string
   name?: string
 }

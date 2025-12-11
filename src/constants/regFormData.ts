@@ -1,6 +1,6 @@
 export const initialRegFormData = {
   email: '',
-  phone: '',
+  phoneNumber: '',
   name: '',
   password: ''
 }

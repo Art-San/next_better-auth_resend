@@ -33,3 +33,15 @@
   - `wiki/config/config-eslint.md`
   - `wiki/index.md`
   - `wiki/changelog.md`
+
+## 2025-12-11T18:17:24
+
+Коммит: (обновление документации)
+
+- **Добавлено:**
+  - `wiki/api/api-set-password.md`
+  - `wiki/components/component-enter-code.md`
+  - `wiki/components/page-verify-phone.md`
+
+- **Обновлено:**
+  - `wiki/index.md` (для включения новых файлов в оглавление)
