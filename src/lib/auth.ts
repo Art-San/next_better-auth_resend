@@ -3,45 +3,66 @@ import { betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
 import { Resend } from 'resend'
 import prisma from '@/server/prisma/prisma-singleton'
+import { phoneNumber } from 'better-auth/plugins'
 
-// Инициализация клиента Resend с использованием API-ключа из переменных окружения
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-// Экспорт сконфигурированного экземпляра betterAuth
 export const auth = betterAuth({
-  // Настройка адаптера базы данных.
-  // Мы используем Prisma для работы с PostgreSQL.
   database: prismaAdapter(prisma, {
     provider: 'postgresql'
   }),
 
-  // Конфигурация стратегии аутентификации по email и паролю
   emailAndPassword: {
-    // Включаем этот метод аутентификации
     enabled: true,
-    // Минимальная требуемая длина пароля
     minPasswordLength: 6,
-    // Обязательное требование подтверждения email после регистрации
     requireEmailVerification: true
   },
-
-  // Настройка процесса подтверждения email
   emailVerification: {
-    // Функция для отправки письма с подтверждением.
-    // Вызывается после успешной регистрации пользователя.
     sendVerificationEmail: async ({ user, url }) => {
       await resend.emails.send({
-        from: 'Северяночка <onboarding@resend.dev>', // Адрес отправителя
-        to: user.email, // Email получателя (зарегистрированного пользователя)
-        subject: 'Подтвердите email', // Тема письма
-        // Тело письма в виде React-компонента
+        from: 'Северяночка <onboarding@resend.dev>',
+        to: user.email,
+        subject: 'Подтвердите email',
+
         react: VerifyEmail({ username: user.name, verifyUrl: url })
       })
     },
-    // Срок действия токена для подтверждения email (в секундах). 86400 = 24 часа.
     expiresIn: 86400,
-    // Отключаем автоматический вход в систему после подтверждения email.
-    // Пользователю нужно будет войти вручную.
     autoSignInAfterVerification: false
-  }
+  },
+  plugins: [
+    phoneNumber({
+      sendOTP: async ({ phoneNumber, code }) => {
+        console.log(`[DEBUG] Отправка OTP: ${code} для ${phoneNumber}`)
+      },
+      // sendOTP: async ({ phoneNumber, code }) => {
+      //   try {
+      //     const response = await fetch(
+      //       `https://sms.ru/sms/send?api_id=${process.env.SMS_API_ID}&to=${phoneNumber}&msg=Ваш код подтверждения от "Северяночки": ${code}&json=1`
+      //     );
+
+      //     const result = await response.json();
+
+      //     if (result.status !== "OK") {
+      //       throw new Error(result.status || "Ошибка отправки SMS");
+      //     }
+      //   } catch (error) {
+      //     console.error("Ошибка отправки SMS:", error);
+      //     throw error;
+      //   }
+      // },
+      signUpOnVerification: {
+        getTempEmail: (phoneNumber) => {
+          return `${phoneNumber}@delivery-shop.ru`
+        },
+        getTempName: (phoneNumber) => {
+          return phoneNumber
+        }
+      },
+      allowedAttempts: 3,
+      otpLength: 4,
+      expiresIn: 300,
+      requireVerification: true
+    })
+  ]
 })
